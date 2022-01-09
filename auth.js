@@ -5,6 +5,7 @@ import * as decoding from 'lib0/decoding'
 
 export const messagePermissionDenied = 0
 export const messagePermissionApproved = 1
+export const messagePermissionRequested = 2
 
 /**
  * @param {encoding.Encoder} encoder
@@ -19,9 +20,18 @@ export const writePermissionDenied = (encoder, reason) => {
  * @param {encoding.Encoder} encoder
  * @param {string} status // string or string encoded json status
  */
- export const writePermissionApproved = (encoder, status) => {
+export const writePermissionApproved = (encoder, status) => {
   encoding.writeVarUint(encoder, messagePermissionApproved)
   encoding.writeVarString(encoder, status)
+}
+
+/**
+ * @param {encoding.Encoder} encoder
+ * @param {string} token // string or string encoded json token
+ */
+export const writePermissionRequested = (encoder, token) => {
+  encoding.writeVarUint(encoder, messagePermissionRequested)
+  encoding.writeVarString(encoder, token)
 }
 
 /**
@@ -37,15 +47,23 @@ export const writePermissionDenied = (encoder, reason) => {
  */
 
 /**
+ * @callback PermissionRequestedHandler
+ * @param {any} y
+ * @param {string} token
+ */
+
+/**
  *
  * @param {decoding.Decoder} decoder
  * @param {Y.Doc} y
  * @param {PermissionDeniedHandler} permissionDeniedHandler
  * @param {PermissionApprovedHandler} permissionApprovedHandler
+ * @param {PermissionRequestedHandler} permissionRequestedHandler
  */
-export const readAuthMessage = (decoder, y, permissionDeniedHandler, permissionApprovedHandler) => {
+export const readAuthMessage = (decoder, y, permissionDeniedHandler, permissionApprovedHandler, permissionRequestedHandler) => {
   switch (decoding.readVarUint(decoder)) {
     case messagePermissionDenied: permissionDeniedHandler(y, decoding.readVarString(decoder))
     case messagePermissionApproved: permissionApprovedHandler(y, decoding.readVarString(decoder))
+    case messagePermissionRequested: permissionRequestedHandler(y, decoding.readVarString(decoder))
   }
 }
