@@ -118,10 +118,10 @@ export const readSyncMessage = (decoder, encoder, doc, transactionOrigin) => {
       readSyncStep1(decoder, encoder, doc)
       break
     case messageYjsSyncStep2:
-      readSyncStep2(decoder, doc, transactionOrigin)
+      if (!transactionOrigin.isReadOnly) readSyncStep2(decoder, doc, transactionOrigin)
       break
     case messageYjsUpdate:
-      readUpdate(decoder, doc, transactionOrigin)
+      if (!transactionOrigin.isReadOnly) readUpdate(decoder, doc, transactionOrigin)
       break
     default:
       throw new Error('Unknown message type')
