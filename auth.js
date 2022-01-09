@@ -17,11 +17,11 @@ export const writePermissionDenied = (encoder, reason) => {
 
 /**
  * @param {encoding.Encoder} encoder
- * @param {string} reason
+ * @param {string} status // string or string encoded json status
  */
- export const writePermissionApproved = (encoder, reason) => {
+ export const writePermissionApproved = (encoder, status) => {
   encoding.writeVarUint(encoder, messagePermissionApproved)
-  encoding.writeVarString(encoder, reason)
+  encoding.writeVarString(encoder, status)
 }
 
 /**
