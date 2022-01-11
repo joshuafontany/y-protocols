@@ -49,6 +49,7 @@ export const writePermissionRequested = (encoder, token) => {
 /**
  * @callback PermissionRequestedHandler
  * @param {any} y
+ * @param {WebSocket} conn
  * @param {string} token
  * @returns {boolean} // authorized, required
  */
@@ -71,11 +72,12 @@ export const readAuthMessage = (decoder, y, permissionDeniedHandler, permissionA
  *
  * @param {decoding.Decoder} decoder
  * @param {Y.Doc} y
+ * @param {WebSocket} conn
  * @param {PermissionRequestedHandler} permissionRequestedHandler
  */
- export const verifyAuthMessage = (decoder, y, permissionRequestedHandler) => {
+ export const verifyAuthMessage = (decoder, y, conn, permissionRequestedHandler) => {
   switch (decoding.readVarUint(decoder)) {
-    case messagePermissionRequested: permissionRequestedHandler(y, decoding.readVarString(decoder))
+    case messagePermissionRequested: permissionRequestedHandler(y, conn, decoding.readVarString(decoder))
   }
 }
 
