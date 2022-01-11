@@ -75,7 +75,7 @@ export const readAuthMessage = (decoder, y, permissionDeniedHandler, permissionA
  */
  export const verifyAuthMessage = (decoder, y, permissionRequestedHandler) => {
   switch (decoding.readVarUint(decoder)) {
-    case messagePermissionRequested: return permissionRequestedHandler(y, decoding.readVarString(decoder))
+    case messagePermissionRequested: permissionRequestedHandler(y, decoding.readVarString(decoder))
   }
 }
 
